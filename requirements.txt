@@ -1,0 +1,15 @@
+# Digit Recognition App Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core ML libraries
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Web framework
+streamlit>=1.24.0
+
+# Image processing
+Pillow>=9.0.0
+
+# Data processing
+numpy>=1.24.0
