@@ -60,11 +60,26 @@ def preprocess_image(image):
     # Resize to 28x28
     image = image.resize((28, 28))
     
-    # Invert colors if needed (white background -> black)
-    image = ImageOps.invert(image)
-    
-    # Convert to numpy array and normalize
+    # Convert to numpy array
     img_array = np.array(image).astype('float32') / 255.0
+    
+    # Analyze the image to determine if inversion is needed
+    # MNIST has black digits (0) on white background (255)
+    # If the center is darker than edges, it's likely black digit on white
+    center_region = img_array[7:21, 7:21]
+    center_mean = np.mean(center_region)
+    edge_region = np.concatenate([img_array[0:7, :].flatten(), img_array[21:28, :].flatten(), 
+                                   img_array[:, 0:7].flatten(), img_array[:, 21:28].flatten()])
+    edge_mean = np.mean(edge_region)
+    
+    # If center is darker than edges, it's already in MNIST format (black digit on white)
+    # If center is lighter, it's inverted (white digit on black)
+    if center_mean < edge_mean:
+        # Already in correct format (black digit on white background)
+        pass
+    else:
+        # Invert colors (white digit on black -> black digit on white)
+        img_array = 1.0 - img_array
     
     # Add channel dimension and batch dimension
     img_array = np.expand_dims(img_array, axis=0)

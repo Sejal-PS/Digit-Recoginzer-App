@@ -69,10 +69,11 @@ print(model)
 print("\nCompiling model...")
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
+scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.5)
 
 # --- 5. Train the Model ---
 print("\nTraining model... (This may take a few minutes)")
-epochs = 5
+epochs = 15
 
 for epoch in range(epochs):
     running_loss = 0.0
@@ -100,7 +101,8 @@ for epoch in range(epochs):
             print(f'[{epoch + 1}, {i + 1}] loss: {running_loss / 100:.3f}, acc: {100 * correct / total:.2f}%')
             running_loss = 0.0
     
-    print(f'Epoch {epoch + 1} completed: Loss: {running_loss / len(train_loader):.3f}, Accuracy: {100 * correct / total:.2f}%')
+    scheduler.step()
+    print(f'Epoch {epoch + 1} completed: Loss: {running_loss / len(train_loader):.3f}, Accuracy: {100 * correct / total:.2f}%, LR: {scheduler.get_last_lr()[0]:.6f}')
 
 # --- 6. Evaluate the Model ---
 print("\nEvaluating model...")
