@@ -128,7 +128,7 @@ def main():
                 # Show detailed probabilities
                 with st.expander("See all probabilities"):
                     for i, prob in enumerate(all_probs):
-                        st.progress(prob)
+                        st.progress(float(prob))
                         st.text(f"Digit {i}: {prob*100:.2f}%")
         
         # Demo section
